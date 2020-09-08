@@ -296,6 +296,7 @@ class DLA(nn.Module):
             model_weights = torch.load(data + name)
         else:
             model_url = get_model_url(data, name, hash)
+            print(model_url)
             model_weights = model_zoo.load_url(model_url)
         num_classes = len(model_weights[list(model_weights.keys())[-1]])
         self.fc = nn.Conv2d(
@@ -310,6 +311,8 @@ def dla34(pretrained=True, **kwargs):  # DLA-34
                 [16, 32, 64, 128, 256, 512],
                 block=BasicBlock, **kwargs)
     if pretrained:
+        #Kunal Addition
+        #model.load_pretrained_model(data='', name='../models/all_dla34.pth')
         model.load_pretrained_model(data='imagenet', name='dla34', hash='ba72cf86')
     return model
 
@@ -481,12 +484,23 @@ class DLASeg(nn.Module):
         return [z]
     
 
+# def get_pose_net(num_layers, heads, head_conv=256, down_ratio=4):
+#   model = DLASeg('dla{}'.format(num_layers), heads,
+#                  pretrained=True,
+#                  down_ratio=down_ratio,
+#                  final_kernel=1,
+#                  last_level=5,
+#                  head_conv=head_conv)
+#   return model
+
+#KD edits
 def get_pose_net(num_layers, heads, head_conv=256, down_ratio=4):
-  model = DLASeg('dla{}'.format(num_layers), heads,
-                 pretrained=True,
+
+    model = DLASeg('dla{}'.format(num_layers), heads,
+                 pretrained=False,
                  down_ratio=down_ratio,
                  final_kernel=1,
                  last_level=5,
                  head_conv=head_conv)
-  return model
+    return model
 

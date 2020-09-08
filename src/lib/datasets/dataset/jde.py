@@ -108,11 +108,18 @@ class LoadVideo:  # for inference
 
     def __next__(self):
         self.count += 1
-        if self.count == len(self):
+        #KDedits
+        # if self.count == len(self):
+        if self.count == (len(self)):
             raise StopIteration
         # Read image
         res, img0 = self.cap.read()  # BGR
-        assert img0 is not None, 'Failed to load frame {:d}'.format(self.count)
+
+        #KDedits
+        if img0 is None:
+            raise StopIteration
+
+        #assert img0 is not None, 'Failed to load frame {:d}'.format(self.count)
         img0 = cv2.resize(img0, (self.w, self.h))
 
         # Padded resize
